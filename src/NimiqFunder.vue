@@ -35,6 +35,8 @@ export default {
       this.is_expanded = !this.is_expanded;
       this.is_hidden = !this.is_hidden;
       this.is_close = !this.is_close;
+
+      // Show Close ICON only if full screen, if not Nimiq ICON
       if (!this.is_shown) setTimeout(()=> this.is_shown = !this.is_shown,1000)
       else this.is_shown = !this.is_shown
     },
