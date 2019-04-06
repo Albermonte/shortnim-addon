@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && npm run build-umd",
+    "build": "vue-cli-service build",
     "build-umd": "vue-cli-service build --target lib --name nimiq-funder --dest ./dist/umd ./src/main.js",
     "build-help": "vue-cli-service build --help",
     "lint": "vue-cli-service lint"
