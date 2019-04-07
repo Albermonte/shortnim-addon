@@ -14,9 +14,23 @@
           <use xlink:href="@nimiq/style/nimiq-style.icons.svg#nq-close"></use>
         </svg>
       </div>
-      <span :class="{hidden: is_hidden,hide: hide}">
-        <a>Lorem ipsum dolor sit amet, consectetur adipiscing.</a>
-      </span>
+      <div :class="{hidden: is_hidden,hide: hide, info: true}">
+        <div>
+          <a>Info</a>
+          <div>
+            HashRate: 1 kH/s
+          </div>
+        </div>
+        <div>
+          <a>Text</a>
+        </div>
+        <div>
+          <a>Another Text</a>
+        </div>
+        <div class="text">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -33,7 +47,7 @@ export default {
       is_hidden: !default_expanded,
       is_closed: default_expanded,
       is_shown: !default_expanded,
-      hide : !default_expanded
+      hide: !default_expanded
     };
   },
   created() {
@@ -47,8 +61,8 @@ export default {
 
       // Show Close ICON only if full screen, if not Nimiq ICON
       this.is_shown = !this.is_shown;
-      if (!this.hide) setTimeout(()=> this.hide = !this.hide,800)
-      else this.hide = !this.hide
+      if (!this.hide) setTimeout(() => (this.hide = !this.hide), 800);
+      else this.hide = !this.hide;
     },
     openShortNIM() {
       window.open("https://shortnim.me/", "_blank");
@@ -215,7 +229,7 @@ html {
     border-radius: 5px;
     background: #ffffff;
     box-shadow: 0 4px 64px rgba(0, 0, 0, 0.15);
-    transition: .8s cubic-bezier(.51,.4,.21,1.1);
+    transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);
     z-index: 2;
 
     &.expanded {
@@ -286,6 +300,26 @@ html {
 
   .hide {
     display: none;
+  }
+
+  .info {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+
+  .text {
+    max-width: 50%;
+    font-size: 2vw;
+    text-align: left;
+  }
+  @media screen and (min-width: 1200px) {
+    .text {
+      font-size: 16.36364px;
+    }
   }
 }
 </style>
