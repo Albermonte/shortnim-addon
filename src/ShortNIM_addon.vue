@@ -14,7 +14,7 @@
           <use xlink:href="@nimiq/style/nimiq-style.icons.svg#nq-close"></use>
         </svg>
       </div>
-      <span :class="{hidden: is_hidden , left: true}">
+      <span :class="{hidden: is_hidden,hide: hide}">
         <a>Lorem ipsum dolor sit amet, consectetur adipiscing.</a>
       </span>
     </div>
@@ -32,7 +32,8 @@ export default {
       is_expanded: default_expanded,
       is_hidden: !default_expanded,
       is_closed: default_expanded,
-      is_shown: !default_expanded
+      is_shown: !default_expanded,
+      hide : !default_expanded
     };
   },
   created() {
@@ -46,6 +47,8 @@ export default {
 
       // Show Close ICON only if full screen, if not Nimiq ICON
       this.is_shown = !this.is_shown;
+      if (!this.hide) setTimeout(()=> this.hide = !this.hide,800)
+      else this.hide = !this.hide
     },
     openShortNIM() {
       window.open("https://shortnim.me/", "_blank");
@@ -184,13 +187,6 @@ let PoolMiner = {
 };
 </script>
 
-// Gradient for svg logo
-<style>
-.cls-1 {
-  fill: url(#radial-gradient);
-}
-</style>
-
 // Style
 <style lang="less" scoped>
 html {
@@ -283,13 +279,13 @@ html {
     padding: 3px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     cursor: pointer;
   }
 
-  .left{
-    float: left;
+  .hide {
+    display: none;
   }
 }
 </style>
