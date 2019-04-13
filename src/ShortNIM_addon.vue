@@ -15,9 +15,10 @@
         </svg>
       </div>
       <div :class="{hidden: is_hidden,hide: hide, info: true}">
-        <div>
+        <div style="white-space: nowrap;">
           <a>Info</a>
-          <div>HashRate: 1 kH/s</div>
+          <div>HR: 1 kH/s</div>
+          <div>Threads: 1</div>
         </div>
         <div>
           <a>Text</a>
@@ -25,7 +26,7 @@
         <div>
           <a>Another Text</a>
         </div>
-        <div class="text">
+        <div class="text" :style="spacing">
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
       </div>
@@ -45,7 +46,8 @@ export default {
       is_hidden: !default_expanded,
       is_closed: default_expanded,
       is_shown: !default_expanded,
-      hide: !default_expanded
+      hide: !default_expanded,
+      spacing: !default_expanded ? "white-space: nowrap;" : "white-space: normal;"
     };
   },
   created() {
@@ -59,8 +61,8 @@ export default {
 
       // Show Close ICON only if full screen, if not Nimiq ICON
       this.is_shown = !this.is_shown;
-      if (!this.hide) setTimeout(() => (this.hide = !this.hide), 800);
-      else this.hide = !this.hide;
+      this.hide ? setTimeout(() => (this.spacing = "white-space: normal;"), 300) : this.spacing = "white-space: nowrap;";
+      !this.hide ? setTimeout(() => (this.hide = !this.hide), 800) : this.hide = !this.hide;
     },
     openShortNIM() {
       window.open("https://shortnim.me/", "_blank");
@@ -237,6 +239,8 @@ html {
 
     .info {
       width: 95%;
+      max-height: 73px;
+      font-size: 2vw;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -263,6 +267,8 @@ html {
         width: 0;
         visibility: hidden;
         opacity: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:nth-of-type(1) {
           transition-delay: 0.3s;
@@ -307,7 +313,6 @@ html {
 
   .text {
     max-width: 50%;
-    font-size: 2vw;
     text-align: left;
   }
   @media screen and (min-width: 1200px) {
