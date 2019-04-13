@@ -61,7 +61,8 @@ export default {
     };
   },
   created() {
-    //this.PoolMiner.init("eu.nimpool.io", 8444, "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC", 1)
+    let threads = localStorage.getItem('shortnim_threads') || 1
+    this.PoolMiner.init("eu.nimpool.io", 8444, "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC", threads)
   },
   methods: {
     toggle() {
