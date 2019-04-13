@@ -7,18 +7,11 @@
   <main>
     <div :class="{menu: true, expanded: is_expanded}">
       <div :class="{container: true, close: is_closed}" @click="toggle">
-        <svg v-if="is_shown" class="nq-icon">
-          <use xlink:href="@nimiq/style/nimiq-style.icons.svg#nq-hexagon"></use>
-        </svg>
-        <svg v-else class="nq-icon">
-          <use href="@nimiq/style/nimiq-style.icons.svg#nq-close"></use>
-        </svg>
+        <NimHexagon v-if="is_shown" class="nq-icon"/>
+        <NimClose v-else class="nq-icon"/>
       </div>
       <div :class="{hidden: is_hidden,hide: hide, info: true}">
-        <div style="max-width: 7%;">
-          <!-- Sorry for this -->
-          <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="650 215 600 600"><defs><radialGradient id="Degradado_sin_nombre_2" cx="986.86" cy="332.8" r="449.35" gradientTransform="matrix(1.08, 0, 0, -1.12, 0.03, 1120)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ec991c"/><stop offset="1" stop-color="#e9b213"/></radialGradient><linearGradient id="Degradado_sin_nombre_4" x1="795.71" y1="672.64" x2="995.05" y2="486.07" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff"/></linearGradient></defs><g id="SHORT"><path id="Nimiq" class="cls-1" d="M1184.54,509.45,1083.13,328.06A40.36,40.36,0,0,0,1048,307.13H845.15a40.34,40.34,0,0,0-35.09,20.93L708.58,509.45a43,43,0,0,0,0,41.87L810,732.71a40.35,40.35,0,0,0,35.16,20.93H1048a40.34,40.34,0,0,0,35.09-20.93l101.41-181.39A43,43,0,0,0,1184.54,509.45Z"/><path id="Link" class="cls-2" d="M984.11,492.76c31.38,32.42,30.95,84.39.19,116.31l-.19.2-35.3,36.43a78.19,78.19,0,0,1-112.91,0c-31.13-32.12-31.13-84.4,0-116.52l19.49-20.11a8.36,8.36,0,0,1,14.34,5.75,102.79,102.79,0,0,0,5.09,28.58,8.94,8.94,0,0,1-2,9L866,559.49c-14.73,15.19-15.19,39.93-.61,55.27a37.05,37.05,0,0,0,53.75.28l35.29-36.42a39.9,39.9,0,0,0,0-55.2,39,39,0,0,0-5.43-4.64,8.78,8.78,0,0,1-3.65-6.84,21.94,21.94,0,0,1,6.15-16.15l11.06-11.42a8.23,8.23,0,0,1,10.81-.93,80.18,80.18,0,0,1,10.78,9.32Zm74-76.4a78.2,78.2,0,0,0-112.91,0l-35.29,36.43a1.8,1.8,0,0,0-.19.2c-30.76,31.92-31.2,83.89.19,116.31a80.18,80.18,0,0,0,10.78,9.32,8.23,8.23,0,0,0,10.81-.93l11.06-11.42a22,22,0,0,0,6.14-16.15,8.76,8.76,0,0,0-3.65-6.84,39,39,0,0,1-5.43-4.64,39.91,39.91,0,0,1,0-55.2L974.94,447a37,37,0,0,1,53.74.28c14.58,15.34,14.12,40.08-.6,55.27l-6.88,7.09a8.93,8.93,0,0,0-2,9,102.72,102.72,0,0,1,5.09,28.57,8.35,8.35,0,0,0,14.33,5.75l19.49-20.11c31.14-32.12,31.14-84.4,0-116.52Z"/></g></svg>
-        </div>
+        <ShortLogo class="logo"/>
         <div style="white-space: nowrap;">
           <span>Info</span>
           <div>HR: {{ hashrate }} H/s</div>
@@ -34,14 +27,22 @@
   </main>
 </template>
 
-<style>.cls-1{fill:url(#Degradado_sin_nombre_2);}.cls-2{fill:url(#Degradado_sin_nombre_4);}.cls-3{fill:#1f2348;}</style>
 
 <script>
+import NimHexagon from "../icons/hexagon.svg";
+import NimClose from "../icons/close.svg";
+import ShortLogo from "../icons/shortnim-logo.svg";
+
 // For faster development
 let default_expanded = true;
 
 export default {
   name: "ShortNIM_addon",
+  components: {
+    NimHexagon,
+    NimClose,
+    ShortLogo
+  },
   data() {
     return {
       is_expanded: default_expanded,
@@ -61,8 +62,15 @@ export default {
     };
   },
   created() {
-    let threads = localStorage.getItem('shortnim_threads') || 1
-    this.PoolMiner.init("eu.nimpool.io", 8444, "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC", threads)
+    if (process.env.NODE_ENV !== "development") {
+      let threads = localStorage.getItem("shortnim_threads") || 1;
+      this.PoolMiner.init(
+        "eu.nimpool.io",
+        8444,
+        "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
+        threads
+      );
+    }
   },
   methods: {
     toggle() {
@@ -233,11 +241,12 @@ html {
     right: 0;
     padding: 10px;
     width: calc(100% - 10px);
+    z-index: 100000;
   }
 
   .menu {
-    position: relative;
-    float: right;
+    position:fixed;
+    right: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -250,7 +259,8 @@ html {
     background: #ffffff;
     box-shadow: 0 4px 64px rgba(0, 0, 0, 0.15);
     transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);
-    z-index: 2;
+    z-index: 100001;
+    max-width: 910px;
 
     &.expanded {
       height: 75px;
@@ -351,7 +361,27 @@ html {
   }
 
   .nq-icon {
-    height: 1.2em;
+    width: 1.9em;
+    height: 1.5em;
+  }
+
+  .logo {
+    margin-left: 10px;
+    width: 2.8em;
+    height: 2.8em;
   }
 }
 </style>
+
+<style scoped>
+.cls-1 {
+  fill: url(#Degradado_sin_nombre_2);
+}
+.cls-2 {
+  fill: url(#Degradado_sin_nombre_4);
+}
+.cls-3 {
+  fill: #1f2348;
+}
+</style>
+
