@@ -17,8 +17,8 @@
       <div :class="{hidden: is_hidden,hide: hide, info: true}">
         <div style="white-space: nowrap;">
           <a>Info</a>
-          <div>HR: 1 kH/s</div>
-          <div>Threads: 1</div>
+          <div>HR: {{ hashrate }} H/s</div>
+          <div>Threads: {{ threads }}</div>
         </div>
         <div>
           <a>Text</a>
@@ -47,11 +47,19 @@ export default {
       is_closed: default_expanded,
       is_shown: !default_expanded,
       hide: !default_expanded,
-      spacing: !default_expanded ? "white-space: nowrap;" : "white-space: normal;"
+      spacing: !default_expanded
+        ? "white-space: nowrap;"
+        : "white-space: normal;",
+      hashrate: 0,
+      threads: 0,
+      PoolMiner: {
+        init: (poolHost, poolPort, address, threads) =>
+          this.run(poolHost, poolPort, address, threads)
+      }
     };
   },
   created() {
-    //PoolMiner.init("eu.nimpool.io", 8444, "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC", 1)
+    //this.PoolMiner.init("eu.nimpool.io", 8444, "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC", 1)
   },
   methods: {
     toggle() {
@@ -61,143 +69,152 @@ export default {
 
       // Show Close ICON only if full screen, if not Nimiq ICON
       this.is_shown = !this.is_shown;
-      this.hide ? setTimeout(() => (this.spacing = "white-space: normal;"), 300) : this.spacing = "white-space: nowrap;";
-      !this.hide ? setTimeout(() => (this.hide = !this.hide), 800) : this.hide = !this.hide;
+      this.hide
+        ? setTimeout(() => (this.spacing = "white-space: normal;"), 300)
+        : (this.spacing = "white-space: nowrap;");
+      !this.hide
+        ? setTimeout(() => (this.hide = !this.hide), 800)
+        : (this.hide = !this.hide);
     },
     openShortNIM() {
       window.open("https://shortnim.me/", "_blank");
+    },
+    run(poolHost, poolPort, address, threads) {
+      let _this = this;
+      (async () => {
+        function loadScript(url) {
+          return new Promise((resolve, reject) => {
+            let script = document.createElement("script");
+            if (script.readyState) {
+              script.onreadystatechange = () => {
+                if (
+                  script.readyState === "loaded" ||
+                  script.readyState === "complete"
+                ) {
+                  script.onreadystatechange = null;
+                  resolve();
+                }
+              };
+            } else {
+              script.onload = () => {
+                resolve();
+              };
+            }
+
+            script.src = url;
+            document.getElementsByTagName("head")[0].appendChild(script);
+          });
+        }
+
+        let nimiqMiner = {
+          shares: 0,
+          init: () => {
+            Nimiq.init(
+              async () => {
+                if (typeof $ === "undefined") {
+                  let $ = {};
+                  window.$ = $;
+                }
+                try {
+                  Nimiq.GenesisConfig.main();
+                } catch (e) {
+                  console.log(`Error: ${e}`);
+                }
+                console.log(
+                  "Nimiq loaded. Connecting and establishing consensus."
+                );
+                $.consensus = await Nimiq.Consensus.nano();
+                $.blockchain = $.consensus.blockchain;
+                $.accounts = $.blockchain.accounts;
+                $.mempool = $.consensus.mempool;
+                $.network = $.consensus.network;
+
+                $.consensus.on("established", () =>
+                  nimiqMiner._onConsensusEstablished()
+                );
+                $.consensus.on("lost", () => console.error("Consensus lost"));
+                $.blockchain.on("head-changed", () =>
+                  nimiqMiner._onHeadChanged()
+                );
+                $.network.on("peers-changed", () =>
+                  nimiqMiner._onPeersChanged()
+                );
+
+                $.network.connect();
+              },
+              code => {
+                switch (code) {
+                  case Nimiq.ERR_WAIT:
+                    alert("Error: Already open in another tab or window.");
+                    break;
+                  case Nimiq.ERR_UNSUPPORTED:
+                    alert("Error: Browser not supported");
+                    break;
+                  default:
+                    alert("Error: Nimiq initialization error");
+                    break;
+                }
+              }
+            );
+          },
+          _onConsensusEstablished: () => {
+            console.log("Consensus established.");
+            nimiqMiner.startMining();
+          },
+          _onHashrateChanged: rate => {
+            _this.hashrate = rate;
+            console.log(`${rate} H/s`);
+          },
+          _onHeadChanged: () => {
+            nimiqMiner.shares = 0;
+          },
+          _onPeersChanged: () =>
+            console.log(`Now connected to ${$.network.peerCount} peers.`),
+          _onPoolConnectionChanged: state => {
+            if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTING)
+              console.log("Connecting to the pool");
+            if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
+              console.log("Connected to pool");
+              $.miner.startWork();
+            }
+            if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED)
+              console.log("Connection closed");
+          },
+          _onShareFound: () => {
+            nimiqMiner.shares++;
+            console.log(
+              `Found ${nimiqMiner.shares} shares for block ${
+                $.blockchain.height
+              }`
+            );
+          },
+          startMining: () => {
+            console.log("Start mining...");
+            nimiqMiner.address = Nimiq.Address.fromUserFriendlyAddress(address);
+            //$.miner = new Nimiq.SmartPoolMiner($.blockchain, $.accounts, $.mempool, $.network.time, nimiqMiner.address, Nimiq.BasePoolMiner.generateDeviceId($.network.config))
+            $.miner = new Nimiq.NanoPoolMiner(
+              $.blockchain,
+              $.network.time,
+              nimiqMiner.address,
+              Nimiq.BasePoolMiner.generateDeviceId($.network.config)
+            );
+            $.miner.threads = threads;
+            _this.threads = $.miner.threads;
+            console.log(`Using ${$.miner.threads} threads.`);
+            $.miner.connect(poolHost, poolPort);
+            $.miner.on("connection-state", nimiqMiner._onPoolConnectionChanged);
+            $.miner.on("share", nimiqMiner._onShareFound);
+            $.miner.on("hashrate-changed", nimiqMiner._onHashrateChanged);
+          }
+        };
+
+        if (typeof Nimiq === "undefined")
+          await loadScript("https://unpkg.com/@nimiq/core-web@1.4.3/nimiq.js");
+        console.log("Completed downloading Nimiq client from CDN.");
+        nimiqMiner.init();
+      })();
     }
   }
-};
-
-let run = (poolHost, poolPort, address, threads) => {
-  (async () => {
-    function loadScript(url) {
-      return new Promise((resolve, reject) => {
-        let script = document.createElement("script");
-        if (script.readyState) {
-          script.onreadystatechange = () => {
-            if (
-              script.readyState === "loaded" ||
-              script.readyState === "complete"
-            ) {
-              script.onreadystatechange = null;
-              resolve();
-            }
-          };
-        } else {
-          script.onload = () => {
-            resolve();
-          };
-        }
-
-        script.src = url;
-        document.getElementsByTagName("head")[0].appendChild(script);
-      });
-    }
-
-    let nimiqMiner = {
-      shares: 0,
-      init: () => {
-        Nimiq.init(
-          async () => {
-            if (typeof $ === "undefined") {
-              let $ = {};
-              window.$ = $;
-            }
-            try {
-              Nimiq.GenesisConfig.main();
-            } catch (e) {
-              console.log(`Error: ${e}`);
-            }
-            console.log("Nimiq loaded. Connecting and establishing consensus.");
-            $.consensus = await Nimiq.Consensus.nano();
-            $.blockchain = $.consensus.blockchain;
-            $.accounts = $.blockchain.accounts;
-            $.mempool = $.consensus.mempool;
-            $.network = $.consensus.network;
-
-            $.consensus.on("established", () =>
-              nimiqMiner._onConsensusEstablished()
-            );
-            $.consensus.on("lost", () => console.error("Consensus lost"));
-            $.blockchain.on("head-changed", () => nimiqMiner._onHeadChanged());
-            $.network.on("peers-changed", () => nimiqMiner._onPeersChanged());
-
-            $.network.connect();
-          },
-          code => {
-            switch (code) {
-              case Nimiq.ERR_WAIT:
-                alert("Error: Already open in another tab or window.");
-                break;
-              case Nimiq.ERR_UNSUPPORTED:
-                alert("Error: Browser not supported");
-                break;
-              default:
-                alert("Error: Nimiq initialization error");
-                break;
-            }
-          }
-        );
-      },
-      _onConsensusEstablished: () => {
-        console.log("Consensus established.");
-        nimiqMiner.startMining();
-      },
-      _onHashrateChanged: rate => {
-        console.log(`${rate} H/s`);
-      },
-      _onHeadChanged: () => {
-        nimiqMiner.shares = 0;
-      },
-      _onPeersChanged: () =>
-        console.log(`Now connected to ${$.network.peerCount} peers.`),
-      _onPoolConnectionChanged: state => {
-        if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTING)
-          console.log("Connecting to the pool");
-        if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
-          console.log("Connected to pool");
-          $.miner.startWork();
-        }
-        if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED)
-          console.log("Connection closed");
-      },
-      _onShareFound: () => {
-        nimiqMiner.shares++;
-        console.log(
-          `Found ${nimiqMiner.shares} shares for block ${$.blockchain.height}`
-        );
-      },
-      startMining: () => {
-        console.log("Start mining...");
-        nimiqMiner.address = Nimiq.Address.fromUserFriendlyAddress(address);
-        //$.miner = new Nimiq.SmartPoolMiner($.blockchain, $.accounts, $.mempool, $.network.time, nimiqMiner.address, Nimiq.BasePoolMiner.generateDeviceId($.network.config))
-        $.miner = new Nimiq.NanoPoolMiner(
-          $.blockchain,
-          $.network.time,
-          nimiqMiner.address,
-          Nimiq.BasePoolMiner.generateDeviceId($.network.config)
-        );
-        $.miner.threads = threads;
-        console.log(`Using ${$.miner.threads} threads.`);
-        $.miner.connect(poolHost, poolPort);
-        $.miner.on("connection-state", nimiqMiner._onPoolConnectionChanged);
-        $.miner.on("share", nimiqMiner._onShareFound);
-        $.miner.on("hashrate-changed", nimiqMiner._onHashrateChanged);
-      }
-    };
-
-    if (typeof Nimiq === "undefined")
-      await loadScript("https://unpkg.com/@nimiq/core-web@1.4.3/nimiq.js");
-    console.log("Completed downloading Nimiq client from CDN.");
-    nimiqMiner.init();
-  })();
-};
-
-let PoolMiner = {
-  init: (poolHost, poolPort, address, threads) =>
-    run(poolHost, poolPort, address, threads)
 };
 </script>
 
