@@ -17,9 +17,7 @@
       <div :class="{hidden: is_hidden,hide: hide, info: true}">
         <div>
           <a>Info</a>
-          <div>
-            HashRate: 1 kH/s
-          </div>
+          <div>HashRate: 1 kH/s</div>
         </div>
         <div>
           <a>Text</a>
@@ -237,8 +235,13 @@ html {
       width: 100%;
     }
 
-    span {
-      white-space: nowrap;
+    .info {
+      width: 95%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
       visibility: visible;
       opacity: 1;
       transition: 0.3s;
@@ -299,16 +302,7 @@ html {
   }
 
   .hide {
-    display: none;
-  }
-
-  .info {
-    width: 95%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
+    display: none !important;
   }
 
   .text {
