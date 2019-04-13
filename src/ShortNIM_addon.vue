@@ -11,7 +11,7 @@
         <NimClose v-else class="nq-icon"/>
       </div>
       <div :class="{hidden: is_hidden,hide: hide, info: true}">
-        <ShortLogo class="logo"/>
+        <ShortLogo class="shortnim-logo"/>
         <div style="white-space: nowrap;">
           <span>Info</span>
           <div>HR: {{ hashrate }} H/s</div>
@@ -365,7 +365,7 @@ html {
     height: 1.5em;
   }
 
-  .logo {
+  .shortnim-logo {
     margin-left: 10px;
     width: 2.8em;
     height: 2.8em;
