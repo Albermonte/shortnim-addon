@@ -4,27 +4,30 @@
 */
 
 <template>
-  <main>
-    <div :class="{menu: true, expanded: is_expanded}">
-      <div :class="{container: true, close: is_closed}" @click="toggle">
-        <NimHexagon v-if="is_shown" class="nq-icon"/>
-        <NimClose v-else class="nq-icon"/>
+  <div :class="{expanded: is_expanded}" class="addon">
+    <div :class="{hidden: is_hidden, hide: hide}" class="notification">
+      <ShortLogo class="shortnim-logo"/>
+      <!-- <div style="white-space: nowrap;"> -->
+      <div class="notification__info">
+        <span class="grid-data">
+          <span class="info__title">Info</span>
+          <span class="value">{{ hashrate }}</span>
+          <span class="type">H/s</span>
+          <span class="value">{{ threads }}</span>
+          <span class="type">thread{{ threads === 1 ? '' : 's' }}</span>
+        </span>
       </div>
-      <div :class="{hidden: is_hidden,hide: hide, info: true}">
-        <ShortLogo class="shortnim-logo"/>
-        <div style="white-space: nowrap;">
-          <span>Info</span>
-          <div>HR: {{ hashrate }} H/s</div>
-          <div>Threads: {{ threads }}</div>
-        </div>
-        <div class="text" :style="spacing">
-          <p>
-            <a href="http://shortnim.me/">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
-          </p>
-        </div>
+      <div class="text" :style="spacing">
+        <p>
+          <a href="http://shortnim.me/">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
+        </p>
       </div>
     </div>
-  </main>
+    <div :class="{container: true, close: is_closed}" @click="toggle">
+      <NimHexagon v-if="is_shown" class="nq-icon"/>
+      <NimClose v-else class="nq-icon"/>
+    </div>
+  </div>
 </template>
 
 
@@ -232,48 +235,36 @@ export default {
 // Style
 <style lang="less" scoped>
 html {
-  font-family: roboto;
-  font-size: 16.36364px;
-
-  main {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px;
-    width: calc(100% - 10px);
-    z-index: 100000;
-  }
-
-  .menu {
-    position:fixed;
+  .addon {
+    position: fixed;
+    --nimiq-lateral-margin: 10px;
+    top: 10px;
     right: 10px;
+    padding: 5px 15px;
+    z-index: 100000;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
     height: 55px;
-    width: 55px;
-    padding: 15px;
+    width: calc(100vw - var(--nimiq-lateral-margin) * 2);
+    max-width: 570px;
     border-radius: 5px;
     background: #ffffff;
     box-shadow: 0 4px 64px rgba(0, 0, 0, 0.15);
-    transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);
-    z-index: 100001;
-    max-width: 910px;
+    /*transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);*/
 
     &.expanded {
-      height: 75px;
-      width: 100%;
+      height: 70px;
     }
 
-    .info {
-      width: 95%;
+    .notification {
       max-height: 73px;
       font-size: 2vw;
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       text-align: center;
       visibility: visible;
@@ -313,15 +304,59 @@ html {
           transition-delay: 0s;
         }
       }
-    }
 
-    span {
-      text-decoration: none;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: #333333;
-      padding: 5px;
-      transition: 0.3s;
+      .shortnim-logo {
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        left: -20px;
+        transform: scale(1.09);
+      }
+
+      .notification__info {
+        display: flex;
+        flex-direction: column;
+        font-family: "Fira Mono", monospace;
+        font-size: 14px;
+        margin: 0 20px 0 40px;
+
+        .grid-data {
+          display: grid;
+          justify-content: space-between;
+          align-items: baseline;
+          grid-column-gap: 10px;
+          grid-template-columns: 25px 56px;
+
+          .info__title {
+            text-decoration: none;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: bold;
+            color: #123145;
+            transition: 0.3s;
+            grid-column: 1 / span 2;
+          }
+
+          .value {
+            text-align: right;
+          }
+          .type {
+            text-align: left;
+            font-size: 13px;
+          }
+        }
+      }
+
+      .text {
+        p {
+          flex: 1;
+          text-align: justify;
+          line-height: 1.1;
+          font-size: 13px;
+          margin: 0;
+          margin-right: 20px;
+        }
+      }
     }
 
     a {
@@ -329,46 +364,64 @@ html {
       font-weight: bold;
       color: #0582ca;
     }
-  }
 
-  .container {
-    order: 1;
-    width: 28px;
-    height: 24px;
-    padding: 2px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .hide {
-    display: none !important;
-  }
-
-  .text {
-    max-width: 70%;
-    text-align: left;
-  }
-  @media screen and (min-width: 900px) {
-    .text {
-      font-size: 16.36364px;
+    .container {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      cursor: pointer;
     }
-    .menu .info {
-      font-size: 16.36364px;
+
+    .nq-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .hide {
+      display: none !important;
     }
   }
 
-  .nq-icon {
-    width: 1.9em;
-    height: 1.5em;
-  }
+  @media screen and (max-width: 630px) {
+    .addon {
+      padding: 5px;
 
-  .shortnim-logo {
-    margin-left: 10px;
-    width: 2.8em;
-    height: 2.8em;
+      .notification {
+        flex-direction: column-reverse;
+        justify-content: space-between;
+        height: 100%;
+        margin: 5px 0;
+
+        .shortnim-logo {
+          display: none;
+        }
+        .notification__info {
+          margin: 0;
+
+          .grid-data {
+            grid-template-columns: 25px 56px 25px 56px;
+
+            .info__title {
+              display: none;
+            }
+          }
+        }
+
+        .text {
+          p {
+            font-size: 11px;
+            margin: 6px 5px 4px 0;
+          }
+        }
+      }
+
+      .container {
+        transform: scale(0.7);
+      }
+    }
   }
 }
 </style>
