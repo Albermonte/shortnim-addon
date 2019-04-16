@@ -9,12 +9,16 @@
       <ShortLogo class="shortnim-logo"/>
       <!-- <div style="white-space: nowrap;"> -->
       <div class="notification__info">
-        <span class="grid-data">
+        <span class="data">
           <span class="info__title">Info</span>
-          <span class="value">{{ hashrate }}</span>
-          <span class="type">H/s</span>
-          <span class="value">{{ threads }}</span>
-          <span class="type">thread{{ threads === 1 ? '' : 's' }}</span>
+          <div class="row">
+            <span>{{ hashrate }}</span>
+            <span>H/s</span>
+          </div>
+          <div class="row">
+            <span>{{ threads }}</span>
+            <span>thread{{ threads === 1 ? '' : 's' }}</span>
+          </div>
         </span>
       </div>
       <div class="text" :style="spacing">
@@ -74,6 +78,10 @@ export default {
         threads
       );
     }
+    else{
+      this.threads = 2;
+      this.hashrate = 1459;
+    }    
   },
   methods: {
     toggle() {
@@ -318,14 +326,13 @@ html {
         flex-direction: column;
         font-family: "Fira Mono", monospace;
         font-size: 14px;
-        margin: 0 20px 0 40px;
+        margin: 0 20px 0 56px;
 
-        .grid-data {
-          display: grid;
+        .data {
+          display: flex;
+          flex-direction: column;
           justify-content: space-between;
-          align-items: baseline;
-          grid-column-gap: 10px;
-          grid-template-columns: 45px 55px;
+          width: 70px;
 
           .info__title {
             text-decoration: none;
@@ -333,16 +340,17 @@ html {
             text-align: center;
             font-weight: bold;
             color: #123145;
+            font-size: 11px;
             transition: 0.3s;
-            grid-column: 1 / span 2;
           }
 
-          .value {
-            text-align: right;
-          }
-          .type {
-            text-align: left;
-            font-size: 13px;
+          .row {
+            display: flex;
+            justify-content: space-between;
+
+            span {
+              font-size: 13px;
+            }
           }
         }
       }
@@ -400,12 +408,19 @@ html {
         }
         .notification__info {
           margin: 0;
+          width: 100%;
 
-          .grid-data {
-            grid-template-columns: 45px 55px 45px 55px;
+          .data {
+            width: inherit;
+            flex-direction: row;
+            justify-content: space-around;
 
             .info__title {
               display: none;
+            }
+
+            .row span {
+              margin: 0 2px;
             }
           }
         }
