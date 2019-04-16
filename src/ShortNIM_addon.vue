@@ -325,7 +325,7 @@ html {
           justify-content: space-between;
           align-items: baseline;
           grid-column-gap: 10px;
-          grid-template-columns: 25px 56px;
+          grid-template-columns: 45px 55px;
 
           .info__title {
             text-decoration: none;
@@ -402,7 +402,7 @@ html {
           margin: 0;
 
           .grid-data {
-            grid-template-columns: 25px 56px 25px 56px;
+            grid-template-columns: 45px 55px 45px 55px;
 
             .info__title {
               display: none;
@@ -425,16 +425,3 @@ html {
   }
 }
 </style>
-
-<style scoped>
-.cls-1 {
-  fill: url(#Degradado_sin_nombre_2);
-}
-.cls-2 {
-  fill: url(#Degradado_sin_nombre_4);
-}
-.cls-3 {
-  fill: #1f2348;
-}
-</style>
-
