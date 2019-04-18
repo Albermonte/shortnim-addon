@@ -4,17 +4,19 @@
 */
 
 <template>
-  <div :class="{expanded: is_expanded}" class="addon">
-    <div :class="{hidden: is_hidden, hide: hide}" class="notification">
-      <ShortLogo class="shortnim-logo"/>
-      <ShortnimInfo/>
-      <ShortnimText :style="spacing"/>
+  <vue-draggable-resizable @dragging="onDrag" :parent="true" drag-handle=".notification" :grid="[10,10]" :resizable="false" axis="y" :y="10">
+    <div :class="{expanded: is_expanded}" class="addon" :style="{'top': y || 10}">
+      <div :class="{hidden: is_hidden, hide: hide}" class="notification">
+        <ShortLogo class="shortnim-logo"/>
+        <ShortnimInfo/>
+        <ShortnimText :style="spacing"/>
+      </div>
+      <div :class="{container: true, close: is_closed}" @click="toggle">
+        <NimHexagon v-if="is_shown" class="nq-icon"/>
+        <NimClose v-else class="nq-icon"/>
+      </div>
     </div>
-    <div :class="{container: true, close: is_closed}" @click="toggle">
-      <NimHexagon v-if="is_shown" class="nq-icon"/>
-      <NimClose v-else class="nq-icon"/>
-    </div>
-  </div>
+  </vue-draggable-resizable>
 </template>
 
 
@@ -25,6 +27,8 @@ import ShortLogo from "../icons/shortnim-logo.svg";
 
 import ShortnimInfo from "@/components/ShortnimInfo";
 import ShortnimText from "@/components/ShortnimText";
+
+import VueDraggableResizable from "vue-draggable-resizable";
 
 // For faster development
 let default_expanded = true;
@@ -47,10 +51,14 @@ export default {
       hide: !default_expanded,
       spacing: !default_expanded
         ? "white-space: nowrap;"
-        : "white-space: normal;"
+        : "white-space: normal;",
+      y: 0
     };
   },
   methods: {
+    onDrag: function(x, y) {
+      this.y = y;
+    },
     toggle() {
       this.is_expanded = !this.is_expanded;
       this.is_hidden = !this.is_hidden;
@@ -75,7 +83,6 @@ html {
   .addon {
     position: fixed;
     --nimiq-lateral-margin: 10px;
-    top: 10px;
     right: 10px;
     padding: 5px 15px;
     z-index: 100000;
