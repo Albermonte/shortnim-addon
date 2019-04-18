@@ -33,7 +33,6 @@ import NimClose from "../icons/close.svg";
 import ShortLogo from "../icons/shortnim-logo.svg";
 
 import ShortnimInfo from "@/components/ShortnimInfo";
-import ShortnimText from "@/components/ShortnimText";
 
 // For faster development
 let default_expanded = true;
