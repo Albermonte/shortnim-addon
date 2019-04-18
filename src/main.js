@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import ShortNIM_addon from './ShortNIM_addon.vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
+import 'prevent-pull-refresh';
 
 import '@nimiq/style/nimiq-style.min.css'
 
