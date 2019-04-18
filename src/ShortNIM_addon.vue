@@ -99,6 +99,7 @@ html {
     box-shadow: 0 4px 64px rgba(0, 0, 0, 0.15);
     /*transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);*/
     line-height: 1;
+    cursor: move;
 
     &.expanded {
       height: 70px;
