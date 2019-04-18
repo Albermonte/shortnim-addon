@@ -4,7 +4,7 @@
 */
 
 <template>
-  <vue-draggable-resizable @dragging="onDrag" :parent="true" drag-handle=".notification" :grid="[10,10]" :resizable="false" axis="y" :y="10">
+  <vue-draggable-resizable @dragging="onDrag" :parent="true" drag-handle=".notification" :resizable="false" axis="y" :y="10">
     <div :class="{expanded: is_expanded}" class="addon" :style="{'top': y || 10}">
       <div :class="{hidden: is_hidden, hide: hide}" class="notification">
         <ShortLogo class="shortnim-logo"/>
