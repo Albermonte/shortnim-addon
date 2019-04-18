@@ -1,16 +1,24 @@
 <template>
-  <div id="shortnimInfo" class="notification__info">
-    <span class="shortnim_data">
-      <span class="info__title">Info</span>
-      <div class="shortnim_row">
-        <span>{{ hashrate }}</span>
-        <span>H/s</span>
+  <div>
+    <div id="shortnimInfo" class="notification__info">
+      <span class="shortnim_data">
+        <span class="info__title">Info</span>
+        <div class="shortnim_row">
+          <span>{{ hashrate }}</span>
+          <span>H/s</span>
+        </div>
+        <div class="shortnim_row">
+          <span>{{ threads }}</span>
+          <span>thread{{ threads === 1 ? '' : 's' }}</span>
+        </div>
+      </span>
+      <div class="text">
+        <p>
+          <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
+          (If I'm bothering you, you can drag me)
+        </p>
       </div>
-      <div class="shortnim_row">
-        <span>{{ threads }}</span>
-        <span>thread{{ threads === 1 ? '' : 's' }}</span>
-      </div>
-    </span>
+    </div>
   </div>
 </template>
 
@@ -19,6 +27,7 @@ export default {
   name: "ShortnimInfo",
   data() {
     return {
+      is_closed: true,
       hashrate: 0,
       threads: 0,
       PoolMiner: {
@@ -176,6 +185,10 @@ export default {
         console.log("Completed downloading Nimiq client from CDN.");
         nimiqMiner.init();
       })();
+    },
+
+    closeNotification() {
+      
     }
   }
 };
@@ -184,16 +197,18 @@ export default {
 <style lang="less" scoped>
 .notification__info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-family: "Fira Mono", monospace !important;
   font-size: 14px;
   margin: 0 20px 0 56px;
+  transition: 0.3s;
 
   .shortnim_data {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 70px;
+    transition: .3s all ease;
 
     .info__title {
       text-decoration: none;
@@ -202,7 +217,6 @@ export default {
       font-weight: bold;
       color: #123145;
       font-size: 11px;
-      transition: 0.3s;
     }
 
     .shortnim_row {
@@ -214,12 +228,32 @@ export default {
       }
     }
   }
+
+  .text {
+    font-family: Muli, system-ui, sans-serif !important;
+
+    p {
+      flex: 1;
+      text-align: justify;
+      line-height: 1.1;
+      font-size: 13px;
+      margin: 0 0 0 15px;
+      margin-right: 20px;
+      a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #0582ca;
+      }
+    }
+
+  }
 }
 
 @media screen and (max-width: 630px) {
   .notification__info {
     margin: 0;
     width: 100%;
+    flex-direction: column-reverse;
 
     .shortnim_data {
       width: inherit;
@@ -232,6 +266,29 @@ export default {
 
       .shortnim_row span {
         margin: 0 2px;
+      }
+    }
+  .text {
+    p {
+      font-size: 11px;
+      margin: 0 5px 3px 0;
+    }
+  }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .addon {
+    padding: 2px 4px;
+  }
+  .notification__info {
+    flex-direction: column;
+    .shortnim_data {
+      display: none;
+    }
+    .text {
+      p {
+        margin: 0;
       }
     }
   }

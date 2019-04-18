@@ -4,14 +4,21 @@
 */
 
 <template>
-  <vue-draggable-resizable class="resize" @dragging="onDrag" :h="70" :parent="true" drag-handle=".addon" :resizable="false" axis="y" :y="10">
+  <vue-draggable-resizable
+    class="resize"
+    @dragging="onDrag"
+    :h="70"
+    drag-handle=".addon"
+    :resizable="false"
+    axis="y"
+    :y="10"
+  >
     <div :class="{expanded: is_expanded}" class="addon" :style="{'top': y || 10}">
       <div :class="{hidden: is_hidden, hide: hide}" class="notification">
-        <ShortLogo class="shortnim-logo"/>
-        <ShortnimInfo/>
-        <ShortnimText :style="spacing"/>
+        <ShortLogo class="shortnim-logo" @click="toggle"/>
+        <ShortnimInfo :style="spacing" />
       </div>
-      <div :class="{container: true, close: is_closed}" @click="toggle">
+      <div :class="{container: true, close: is_closed}" @click="toggle" class="close-btn">
         <NimHexagon v-if="is_shown" class="nq-icon"/>
         <NimClose v-else class="nq-icon"/>
       </div>
@@ -28,8 +35,6 @@ import ShortLogo from "../icons/shortnim-logo.svg";
 import ShortnimInfo from "@/components/ShortnimInfo";
 import ShortnimText from "@/components/ShortnimText";
 
-import VueDraggableResizable from "vue-draggable-resizable";
-
 // For faster development
 let default_expanded = true;
 
@@ -44,9 +49,11 @@ export default {
   },
   data() {
     return {
+      is_closed: false,
+
       is_expanded: default_expanded,
       is_hidden: !default_expanded,
-      is_closed: default_expanded,
+      //is_closed: default_expanded,
       is_shown: !default_expanded,
       hide: !default_expanded,
       spacing: !default_expanded
@@ -57,10 +64,17 @@ export default {
   },
   methods: {
     onDrag: function(x, y) {
-      this.y = y;
+      this.y = y
     },
     toggle() {
-      this.is_expanded = !this.is_expanded;
+      if (this.is_closed) {
+        this.openNotification();
+      } else {
+        this.closeNotification();
+      }
+      this.is_closed = !this.is_closed;
+
+      /*this.is_expanded = !this.is_expanded;
       this.is_hidden = !this.is_hidden;
       this.is_closed = !this.is_closed;
 
@@ -71,7 +85,55 @@ export default {
         : (this.spacing = "white-space: nowrap;");
       !this.hide
         ? setTimeout(() => (this.hide = !this.hide), 800)
-        : (this.hide = !this.hide);
+        : (this.hide = !this.hide);*/
+    },
+    openNotification() {
+      const addon = document.querySelector(".addon");
+      const shortnimLogo = document.querySelector(".shortnim-logo");
+      const closeBtn = document.querySelector(".close-btn");
+      const notification = document.querySelector(".notification__info");
+      shortnimLogo.style.transform = "scale(1.09)";
+      addon.style.transform = "scale(1)";
+      if(window.innerWidth < 630){
+          shortnimLogo.style.opacity = '0';
+      }
+      setTimeout(() => {
+        notification.style.visibility = "visible";
+        addon.style.width = "calc(100vw - var(--nimiq-lateral-margin) * 2)";
+        addon.style.background = "#fff";
+        addon.style.boxShadow = " 0 4px 64px rgba(0, 0, 0, 0.15)";
+        closeBtn.style.opacity = 1;
+        shortnimLogo.style.left = "-20px";
+        if(window.innerWidth < 630){
+          shortnimLogo.style.display = 'none';
+        }
+      },300);      
+      setTimeout(() => {
+        notification.style.opacity = 1;        
+      }, 700)
+    },
+    closeNotification() {
+      const addon = document.querySelector(".addon");
+      const shortnimLogo = document.querySelector(".shortnim-logo");
+      const closeBtn = document.querySelector(".close-btn");
+      const notification = document.querySelector(".notification__info");
+      notification.style.opacity = 0;
+      setTimeout(() => {
+        notification.style.visibility = "hidden";
+        addon.style.width = "70px";
+        notification.style.opacity = 0;
+        closeBtn.style.opacity = 0;
+        shortnimLogo.style.left = 0;
+        shortnimLogo.style.display = 'inherit';
+        
+      }, 300)
+      setTimeout(() => {
+        if(window.innerWidth < 630){
+          shortnimLogo.style.opacity = '1';
+        }
+        shortnimLogo.style.transform = "scale(.8)";
+        addon.style.transform = "scale(.6)";        
+      }, 700)
     }
   }
 };
@@ -95,11 +157,11 @@ html {
     width: calc(100vw - var(--nimiq-lateral-margin) * 2);
     max-width: 570px;
     border-radius: 5px;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 4px 64px rgba(0, 0, 0, 0.15);
-    /*transition: 0.8s cubic-bezier(0.51, 0.4, 0.21, 1.1);*/
+    transition: .6s all ease;
     line-height: 1;
-    cursor: move;
+    cursor: grab;
 
     &.expanded {
       height: 70px;
@@ -157,6 +219,7 @@ html {
         height: 70px;
         left: -20px;
         transform: scale(1.09);
+        transition: .3s all ease;
       }
     }
 
@@ -202,8 +265,8 @@ html {
   }
 }
 
-.resize{
-  transition: 0.05s cubic-bezier(.59,.2,.22,1.24);
-  // transition: ease 0.05s
+.resize {
+  transition: 0.1s top cubic-bezier(1, 0.9, 0.45, 1.15);
+  // ease-in-out
 }
 </style>
