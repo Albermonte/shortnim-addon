@@ -47,6 +47,7 @@ export default {
       is_closed: true,
       prevent_open: false,
       seen_before: false,
+      overflow: document.body.style.overflow,
       y: 0
     };
   },
@@ -82,6 +83,7 @@ export default {
     },
     onDragstop() {
       setTimeout(() => (this.prevent_open = false), 100);
+      document.body.style.overflow = this.overflow;
     },
     toggle() {
       if (this.prevent_open) return;
