@@ -67,7 +67,7 @@ export default {
       const shortnimLogo = document.querySelector(".shortnim-logo");
       const closeBtn = document.querySelector(".close-btn");
       const notification = document.querySelector(".notification__info");
-      shortnimLogo.style.transform = "scale(1.09)";
+      setTimeout(()=> shortnimLogo.style.transform = "scale(1.09)",300)
       addon.style.transform = "scale(1)";
       if (window.innerWidth < 630) {
         shortnimLogo.style.opacity = "0";
