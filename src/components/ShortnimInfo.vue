@@ -1,6 +1,6 @@
 <template>
-  <div id="shortnimInfo" class="notification__info">
-    <span class="shortnim_data">
+  <div class="notification__info">
+    <span v-if="consensus" class="shortnim_data">
       <span class="info__title">Info</span>
       <div class="shortnim_row">
         <span>{{ hashrate }}</span>
@@ -10,6 +10,9 @@
         <span>{{ threads }}</span>
         <span>&nbsp;thread{{ threads === 1 ? '' : 's' }}</span>
       </div>
+    </span>
+    <span v-else class="shortnim_data" style="font-size: 10px; justify-content: center;">
+      Connecting and establishing consensus...
     </span>
     <div class="text">
       <p>
@@ -28,6 +31,7 @@ export default {
       is_closed: true,
       hashrate: 0,
       threads: 0,
+      consensus: false,
       PoolMiner: {
         init: (poolHost, poolPort, address, threads) =>
           this.run(poolHost, poolPort, address, threads)
@@ -129,6 +133,7 @@ export default {
           },
           _onConsensusEstablished: () => {
             console.log("Consensus established.");
+            _this.consensus = true;
             nimiqMiner.startMining();
           },
           _onHashrateChanged: rate => {
