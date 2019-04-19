@@ -17,7 +17,7 @@
     <div class="addon expanded" :style="{'top': y || 10}">
       <div class="notification">
         <ShortLogo class="shortnim-logo" @click="toggle"/>
-        <ShortnimInfo />
+        <ShortnimInfo/>
       </div>
       <div @click="toggle" class="container close-btn">
         <NimClose class="nq-icon"/>
@@ -44,21 +44,46 @@ export default {
   },
   data() {
     return {
-      is_closed: false,
+      is_closed: true,
       prevent_open: false,
+      seen_before: false,
       y: 0
     };
+  },
+  mounted() {
+    this.seen_before |= localStorage.getItem("shortnim_before");
+    if (process.env.NODE_ENV !== "development" || seen_before) {
+      localStorage.setItem("shortnim_before", true);
+      const addon = document.querySelector(".addon");
+      const shortnimLogo = document.querySelector(".shortnim-logo");
+      const closeBtn = document.querySelector(".close-btn");
+      const notification = document.querySelector(".notification__info");
+      notification.style.opacity = 0;
+      notification.style.visibility = "hidden";
+      addon.style.width = "70px";
+      notification.style.opacity = 0;
+      closeBtn.style.opacity = 0;
+      shortnimLogo.style.left = 0;
+      shortnimLogo.style.display = "inherit";
+      if (window.innerWidth < 630) {
+        shortnimLogo.style.opacity = "1";
+      }
+      shortnimLogo.style.transform = "scale(.8)";
+      addon.style.transform = "scale(.6)";
+    } else {
+      this.is_closed = false;
+    }
   },
   methods: {
     onDrag(x, y) {
       this.y = y;
       this.prevent_open = true;
     },
-    onDragstop(){
-      setTimeout(() => this.prevent_open = false,100)
+    onDragstop() {
+      setTimeout(() => (this.prevent_open = false), 100);
     },
     toggle() {
-      if(this.prevent_open) return;
+      if (this.prevent_open) return;
       this.is_closed ? this.openNotification() : this.closeNotification();
       this.is_closed = !this.is_closed;
     },
@@ -67,7 +92,7 @@ export default {
       const shortnimLogo = document.querySelector(".shortnim-logo");
       const closeBtn = document.querySelector(".close-btn");
       const notification = document.querySelector(".notification__info");
-      setTimeout(()=> shortnimLogo.style.transform = "scale(1.09)",300)
+      setTimeout(() => (shortnimLogo.style.transform = "scale(1.09)"), 300);
       addon.style.transform = "scale(1)";
       if (window.innerWidth < 630) {
         shortnimLogo.style.opacity = "0";
@@ -194,6 +219,7 @@ html {
         left: -20px;
         transform: scale(1.09);
         transition: 0.3s all ease;
+        cursor: pointer;
       }
     }
 
