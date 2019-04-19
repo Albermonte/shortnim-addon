@@ -28,7 +28,6 @@
 
 
 <script>
-import NimHexagon from "../icons/hexagon.svg";
 import NimClose from "../icons/close.svg";
 import ShortLogo from "../icons/shortnim-logo.svg";
 
@@ -37,7 +36,6 @@ import ShortnimInfo from "@/components/ShortnimInfo";
 export default {
   name: "ShortNIM_addon",
   components: {
-    NimHexagon,
     NimClose,
     ShortLogo,
     ShortnimInfo
