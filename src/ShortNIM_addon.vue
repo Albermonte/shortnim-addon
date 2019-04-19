@@ -64,6 +64,8 @@ export default {
       shortnimLogo.style.left = 0;
       shortnimLogo.style.display = "inherit";
       if (window.innerWidth < 630) {
+        console.log(window.innerWidth)
+        addon.style.top = "55px"
         shortnimLogo.style.opacity = "1";
       }
       shortnimLogo.style.transform = "scale(.8)";
