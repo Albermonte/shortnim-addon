@@ -78,6 +78,7 @@ export default {
     onDrag(x, y) {
       this.y = y;
       this.prevent_open = true;
+      document.body.style.overflow = "hidden";
     },
     onDragstop() {
       setTimeout(() => (this.prevent_open = false), 100);
