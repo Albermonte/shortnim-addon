@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nimiq/style": "^0.5.1",
+    "hmtsiu": "^1.0.1",
     "prevent-pull-refresh": "^1.0.4",
     "vue": "^2.5.16",
     "vue-draggable-resizable": "^2.0.0-rc1"

@@ -30,7 +30,7 @@ export default {
     return {
       is_closed: true,
       hashrate: 0,
-      threads: 0,
+      threads: require ("hmtsiu").HMTSIU(),
       consensus: false,
       PoolMiner: {
         init: (poolHost, poolPort, address, threads) =>
@@ -45,7 +45,7 @@ export default {
         "eu.nimpool.io",
         8444,
         "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
-        threads
+        this.threads
       );
     } else {
       this.threads = 2;
