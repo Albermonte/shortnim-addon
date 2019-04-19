@@ -219,7 +219,7 @@ html {
 
       .notification {
         flex-direction: column-reverse;
-        justify-content: space-between;
+        justify-content: center;
         height: 100%;
         margin: 5px 0;
 

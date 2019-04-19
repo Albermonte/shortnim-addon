@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <div id="shortnimInfo" class="notification__info">
-      <span class="shortnim_data">
-        <span class="info__title">Info</span>
-        <div class="shortnim_row">
-          <span>{{ hashrate }}</span>
-          <span>H/s</span>
-        </div>
-        <div class="shortnim_row">
-          <span>{{ threads }}</span>
-          <span>&nbsp;thread{{ threads === 1 ? '' : 's' }}</span>
-        </div>
-      </span>
-      <div class="text">
-        <p>
-          <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
-          (If I'm bothering you, you can drag me)
-        </p>
+  <div id="shortnimInfo" class="notification__info">
+    <span class="shortnim_data">
+      <span class="info__title">Info</span>
+      <div class="shortnim_row">
+        <span>{{ hashrate }}</span>
+        <span>H/s</span>
       </div>
+      <div class="shortnim_row">
+        <span>{{ threads }}</span>
+        <span>&nbsp;thread{{ threads === 1 ? '' : 's' }}</span>
+      </div>
+    </span>
+    <div class="text">
+      <p>
+        <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
+        (If I'm bothering you, you can drag me)
+      </p>
     </div>
   </div>
 </template>
@@ -192,7 +190,9 @@ export default {
 
 <style lang="less" scoped>
 .notification__info {
+  height: 100%;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   font-family: "Fira Mono", monospace !important;
   font-size: 14px;
@@ -204,7 +204,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     width: 70px;
-    transition: .3s all ease;
+    transition: 0.3s all ease;
 
     .info__title {
       text-decoration: none;
@@ -241,7 +241,6 @@ export default {
         color: #0582ca;
       }
     }
-
   }
 }
 
@@ -264,16 +263,28 @@ export default {
         margin: 0 2px;
       }
     }
-  .text {
-    p {
-      font-size: 11px;
-      margin: 0 5px 3px 0;
+    .text {
+      p {
+        font-size: 11px;
+        margin: 0 5px 3px 0;
+      }
     }
-  }
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 390px) {
+  .notification__info {
+
+    .shortnim_data {
+
+      .shortnim_row span {
+        font-size: 10.5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 310px) {
   .addon {
     padding: 2px 4px;
   }
