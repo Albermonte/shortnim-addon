@@ -43,8 +43,7 @@ export default {
     NimHexagon,
     NimClose,
     ShortLogo,
-    ShortnimInfo,
-    ShortnimText
+    ShortnimInfo
   },
   data() {
     return {
