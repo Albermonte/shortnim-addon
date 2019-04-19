@@ -9,7 +9,7 @@
         </div>
         <div class="shortnim_row">
           <span>{{ threads }}</span>
-          <span>thread{{ threads === 1 ? '' : 's' }}</span>
+          <span>&nbsp;thread{{ threads === 1 ? '' : 's' }}</span>
         </div>
       </span>
       <div class="text">
@@ -185,10 +185,6 @@ export default {
         console.log("Completed downloading Nimiq client from CDN.");
         nimiqMiner.init();
       })();
-    },
-
-    closeNotification() {
-      
     }
   }
 };
