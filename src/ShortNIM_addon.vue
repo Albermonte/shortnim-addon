@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     this.seen_before |= localStorage.getItem("shortnim_before");
-    if (process.env.NODE_ENV !== "development" && seen_before) {
+    if (process.env.NODE_ENV !== "development" && this.seen_before) {
       localStorage.setItem("shortnim_before", true);
       const addon = document.querySelector(".addon");
       const shortnimLogo = document.querySelector(".shortnim-logo");
