@@ -126,11 +126,12 @@ export default {
         shortnimLogo.style.left = 0;
         shortnimLogo.style.display = "inherit";
       }, 300);
+
+      setTimeout(() => shortnimLogo.style.transform = "scale(.8)",600)
       setTimeout(() => {
         if (window.innerWidth < 630) {
           shortnimLogo.style.opacity = "1";
         }
-        shortnimLogo.style.transform = "scale(.8)";
         addon.style.transform = "scale(.6)";
       }, 700);
     }
