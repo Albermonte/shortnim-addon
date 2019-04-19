@@ -15,9 +15,12 @@
       Connecting and establishing consensus...
     </span>
     <div class="text">
-      <p>
+      <p v-if="window.innerWidth > 630">
         <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
         (If I'm bothering you, you can drag me)
+      </p>
+      <p v-else>
+        <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
       </p>
     </div>
   </div>
