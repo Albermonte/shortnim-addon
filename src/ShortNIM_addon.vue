@@ -11,7 +11,7 @@
     :h="70"
     drag-handle=".addon"
     :resizable="false"
-    :draggable="mobile"
+    :draggable="!mobile"
     axis="y"
     :y="10"
   >
