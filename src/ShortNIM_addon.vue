@@ -18,7 +18,7 @@
     <div class="addon expanded" :style="{'top': y || 10}">
       <div class="notification">
         <ShortLogo class="shortnim-logo" @click="toggle"/>
-        <ShortnimInfo :mobile="mobile" />
+        <ShortnimInfo :mobile="mobile"/>
       </div>
       <div @click="toggle" class="container close-btn">
         <NimClose class="nq-icon"/>
@@ -67,7 +67,7 @@ export default {
       shortnimLogo.style.left = 0;
       shortnimLogo.style.display = "inherit";
       if (window.innerWidth < 630) {
-        addon.style.top = "55px"
+        addon.style.top = "55px";
         shortnimLogo.style.opacity = "1";
       }
       shortnimLogo.style.transform = "scale(.8)";
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     onDrag(x, y) {
-      if (window.innerWidth < 630) return
+      if (window.innerWidth < 630) return;
       this.y = y;
       this.prevent_open = true;
       /*
@@ -88,7 +88,7 @@ export default {
       */
     },
     onDragstop() {
-      if (window.innerWidth < 630) return
+      if (window.innerWidth < 630) return;
       setTimeout(() => (this.prevent_open = false), 100);
       //document.body.style.overflow = this.overflow;
     },
@@ -141,6 +141,9 @@ export default {
       setTimeout(() => {
         if (window.innerWidth < 630) {
           shortnimLogo.style.opacity = "1";
+          addon.style.right = "-10px";
+        } else {
+          addon.style.right = "-5px";
         }
         addon.style.transform = "scale(.6)";
       }, 700);
