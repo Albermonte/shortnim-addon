@@ -70,6 +70,8 @@ export default {
         addon.style.top = "55px";
         addon.style.right = "-10px"
         shortnimLogo.style.opacity = "1";
+      }else{
+        addon.style.right = "-5px"
       }
       shortnimLogo.style.transform = "scale(.8)";
       addon.style.transform = "scale(.6)";
