@@ -17,7 +17,7 @@
       style="font-size: 10px; justify-content: center;"
     >Connecting and establishing consensus...</span>
     <div class="text">
-      <p v-if="mobile">
+      <p v-if="!mobile">
         <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
         (If I'm bothering you, you can drag me)
       </p>

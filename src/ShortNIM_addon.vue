@@ -52,7 +52,6 @@ export default {
     };
   },
   mounted() {
-    if (window.innerWidth > 630) this.mobile = true;
     this.seen_before |= parseInt(localStorage.getItem("shortnim_before"));
     if (process.env.NODE_ENV !== "development" && this.seen_before) {
       const addon = document.querySelector(".addon");
@@ -67,7 +66,9 @@ export default {
       shortnimLogo.style.left = 0;
       shortnimLogo.style.display = "inherit";
       if (window.innerWidth < 630) {
+        this.mobile = true; 
         addon.style.top = "55px";
+        addon.style.right = "-10px"
         shortnimLogo.style.opacity = "1";
       }
       shortnimLogo.style.transform = "scale(.8)";
