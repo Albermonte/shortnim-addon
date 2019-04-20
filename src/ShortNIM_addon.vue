@@ -107,6 +107,7 @@ export default {
       if (window.innerWidth < 630) {
         shortnimLogo.style.opacity = "0";
       }
+      addon.style.right = "10px";
       setTimeout(() => {
         notification.style.visibility = "visible";
         addon.style.width = "calc(100vw - var(--nimiq-lateral-margin) * 2)";
