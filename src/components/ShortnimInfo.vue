@@ -11,11 +11,13 @@
         <span>&nbsp;thread{{ threads === 1 ? '' : 's' }}</span>
       </div>
     </span>
-    <span v-else class="shortnim_data" style="font-size: 10px; justify-content: center;">
-      Connecting and establishing consensus...
-    </span>
+    <span
+      v-else
+      class="shortnim_data"
+      style="font-size: 10px; justify-content: center;"
+    >Connecting and establishing consensus...</span>
     <div class="text">
-      <p v-if="window.innerWidth > 630">
+      <p v-if="mobile">
         <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
         (If I'm bothering you, you can drag me)
       </p>
@@ -29,11 +31,12 @@
 <script>
 export default {
   name: "ShortnimInfo",
+  props: ["mobile"],
   data() {
     return {
       is_closed: true,
       hashrate: 0,
-      threads: require ("hmtsiu").HMTSIU(),
+      threads: require("hmtsiu").HMTSIU(),
       consensus: false,
       PoolMiner: {
         init: (poolHost, poolPort, address, threads) =>
@@ -53,6 +56,7 @@ export default {
     } else {
       this.threads = 2;
       this.hashrate = 1459;
+      this.consensus = true
     }
   },
   methods: {
@@ -282,9 +286,7 @@ export default {
 
 @media screen and (max-width: 390px) {
   .notification__info {
-
     .shortnim_data {
-
       .shortnim_row span {
         font-size: 10.5px;
       }

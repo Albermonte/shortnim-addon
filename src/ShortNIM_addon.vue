@@ -11,13 +11,14 @@
     :h="70"
     drag-handle=".addon"
     :resizable="false"
+    :draggable="mobile"
     axis="y"
     :y="10"
   >
     <div class="addon expanded" :style="{'top': y || 10}">
       <div class="notification">
         <ShortLogo class="shortnim-logo" @click="toggle"/>
-        <ShortnimInfo/>
+        <ShortnimInfo :mobile="mobile" />
       </div>
       <div @click="toggle" class="container close-btn">
         <NimClose class="nq-icon"/>
@@ -46,10 +47,12 @@ export default {
       prevent_open: false,
       seen_before: false,
       overflow: document.body.style.overflow,
+      mobile: false,
       y: 0
     };
   },
   mounted() {
+    if (window.innerWidth > 630) this.mobile = true;
     this.seen_before |= parseInt(localStorage.getItem("shortnim_before"));
     if (process.env.NODE_ENV !== "development" && this.seen_before) {
       const addon = document.querySelector(".addon");
@@ -64,7 +67,6 @@ export default {
       shortnimLogo.style.left = 0;
       shortnimLogo.style.display = "inherit";
       if (window.innerWidth < 630) {
-        console.log(window.innerWidth)
         addon.style.top = "55px"
         shortnimLogo.style.opacity = "1";
       }
@@ -77,13 +79,18 @@ export default {
   },
   methods: {
     onDrag(x, y) {
+      if (window.innerWidth < 630) return
       this.y = y;
       this.prevent_open = true;
+      /*
+      Desactivado de momento porque queda feo hasta encontrar una solución para arrastrar en movil
       document.body.style.overflow = "hidden";
+      */
     },
     onDragstop() {
+      if (window.innerWidth < 630) return
       setTimeout(() => (this.prevent_open = false), 100);
-      document.body.style.overflow = this.overflow;
+      //document.body.style.overflow = this.overflow;
     },
     toggle() {
       if (this.prevent_open) return;
