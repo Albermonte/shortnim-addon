@@ -254,6 +254,7 @@ html {
     .nq-icon {
       width: 24px;
       height: 24px;
+      overflow: visible;
     }
   }
 
