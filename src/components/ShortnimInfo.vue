@@ -231,6 +231,7 @@ export default {
       justify-content: space-between;
 
       span {
+        color: var(--nimiq-blue) !important;
         font-size: 13px;
       }
     }
@@ -246,6 +247,8 @@ export default {
       font-size: 13px;
       margin: 0 0 0 15px;
       margin-right: 20px;
+      color: var(--nimiq-blue) !important;
+
       a {
         text-decoration: none;
         font-weight: bold;

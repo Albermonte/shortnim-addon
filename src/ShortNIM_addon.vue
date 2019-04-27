@@ -255,6 +255,8 @@ html {
       width: 24px;
       height: 24px;
       overflow: visible;
+      color: var(--nimiq-blue) !important;
+
     }
   }
 
