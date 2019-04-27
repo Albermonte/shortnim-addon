@@ -66,12 +66,12 @@ export default {
       shortnimLogo.style.left = 0;
       shortnimLogo.style.display = "inherit";
       if (window.innerWidth < 630) {
-        this.mobile = true; 
+        this.mobile = true;
         addon.style.top = "55px";
-        addon.style.right = "-10px"
+        addon.style.right = "-10px";
         shortnimLogo.style.opacity = "1";
-      }else{
-        addon.style.right = "-5px"
+      } else {
+        addon.style.right = "-5px";
       }
       shortnimLogo.style.transform = "scale(.8)";
       addon.style.transform = "scale(.6)";
@@ -137,8 +137,10 @@ export default {
         addon.style.width = "70px";
         notification.style.opacity = 0;
         closeBtn.style.opacity = 0;
-        shortnimLogo.style.left = 0;
-        shortnimLogo.style.display = "inherit";
+        setTimeout(() => {
+          shortnimLogo.style.left = 0;
+          shortnimLogo.style.display = "inherit";
+        }, 100);
       }, 300);
 
       setTimeout(() => (shortnimLogo.style.transform = "scale(.8)"), 600);
@@ -256,7 +258,6 @@ html {
       height: 24px;
       overflow: visible;
       color: var(--nimiq-blue) !important;
-
     }
   }
 

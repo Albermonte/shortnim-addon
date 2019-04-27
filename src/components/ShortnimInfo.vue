@@ -14,7 +14,7 @@
     <span
       v-else
       class="shortnim_data"
-      style="font-size: 10px; justify-content: center;"
+      style="font-size: 10px; justify-content: center; color: var(--nimiq-blue) !important;"
     >Connecting and establishing consensus...</span>
     <div class="text">
       <p v-if="!mobile">
