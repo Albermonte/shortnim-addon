@@ -19,8 +19,8 @@
     <div class="text">
       <p v-if="!mobile">
         <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
-        (If I'm bothering you, you can drag me)
       </p>
+      <p v-if="!mobile" class="nq-text-s"> If I'm bothering you, you can drag me</p>
       <p v-else>
         <a href="http://shortnim.me/" target="_blank">ShortNIM</a> is a service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.
       </p>
@@ -49,13 +49,14 @@ export default {
       this.PoolMiner.init(
         "eu.nimpool.io",
         8444,
-        sessionStorage.getItem("shortnim_address") || "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
+        sessionStorage.getItem("shortnim_address") ||
+          "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
         this.threads
       );
     } else {
       this.threads = 2;
       this.hashrate = 1459;
-      this.consensus = true
+      this.consensus = true;
     }
   },
   methods: {
@@ -213,7 +214,7 @@ export default {
   .shortnim_data {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 70px;
     transition: 0.3s all ease;
 
@@ -294,6 +295,9 @@ export default {
       }
     }
   }
+  .nq-text-s {
+    font-size: 8px !important;
+  }
 }
 
 @media screen and (max-width: 310px) {
@@ -311,5 +315,11 @@ export default {
       }
     }
   }
+}
+
+.nq-text-s {
+  font-size: 12px !important;
+  font-weight: 100 !important;
+  margin-top: 5px !important;
 }
 </style>
